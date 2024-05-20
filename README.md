@@ -14,6 +14,7 @@
  <h3> Github's <br></h3>
   
 <div>
+ <img height="150em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=ElvisCostaOliveira&layout=compact&langs_count=16&theme=tokyonight"> 
   <a href="[https://github.com/elviscostaoliveira/](https://github.com/elviscostaoliveira/)"> 
   <a href="[https://github.com/kirbyns/](https://github.com/kirbyns/)"> 
   
