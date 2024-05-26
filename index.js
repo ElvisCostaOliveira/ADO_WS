@@ -45,7 +45,7 @@ app.post('/register', async (req, res) => {
     usersData.usuarios.push(novoUsuario);
     fs.writeFileSync(USER_DATA_FILE, JSON.stringify(usersData), 'utf8');
     req.session.user = novoUsuario;
-    res.redirect('/calculo');
+    res.redirect('/pagar');
 });
 
 app.post('/login', async (req, res) => {
@@ -53,18 +53,18 @@ app.post('/login', async (req, res) => {
     const usuario = usersData.usuarios.find(u => u.email === email);
     if (usuario && await bcrypt.compare(senha, usuario.senha)) {
         req.session.user = usuario;
-        res.redirect('/calculo');
+        res.redirect('/pagar');
     } else {
         res.status(401).send('Credenciais inválidas ou usuário não registrado.');
     }
 });
 
-app.get('/calculo', (req, res) => {
+app.get('/pagar', (req, res) => {
     if (!req.session.user) {
         return res.redirect('/login');
     }
     res.cookie('username', req.session.user.nome, { httpOnly: false });
-    res.sendFile(path.join(__dirname, 'public', 'calculo.html'));
+    res.sendFile(path.join(__dirname, 'public', 'pagar.html'));
 });
 
 app.get('/logout', (req, res) => {

@@ -5,7 +5,7 @@ document.getElementById('login').addEventListener('submit', function(event) {
 
     axios.post('/login', { email, senha })
         .then(function(response) {
-            window.location.href = '/calculo';
+            window.location.href = '/pagar';
         })
         .catch(function(error) {
             alert('Login falhou: ' + error.response.data);

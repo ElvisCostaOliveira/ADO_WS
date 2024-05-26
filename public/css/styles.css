@@ -1,61 +1,25 @@
-body, html {
-    height: 100%;
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #ececec;
+body {
+    margin-bottom: 80px; /* Ajuste conforme necessário para a altura do seu footer */
 }
 
-.login-container {
-    width: 300px;
-    padding: 20px;
-    margin: 100px auto;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+.btn-sm.custom-small {
+    padding: .25rem .5rem;
+    font-size: .775rem;
+    line-height: 1.5;
+    border-radius: .2rem;
 }
 
-.form-group {
-    margin-bottom: 15px;
+#sumContainer {
+    flex-grow: 1; /* Faz com que o contêiner das somas ocupe todo o espaço disponível */
 }
 
-.form-group label {
-    display: block;
-    margin-bottom: 5px;
-}
-
-.form-group input[type="text"],
-.form-group input[type="password"] {
+.footer {
+    position: fixed;
+    bottom: 0;
     width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    height: 50px; /* Altura fixa do footer */
+    line-height: 30px; /* Centraliza verticalmente o texto no footer */
+    background-color: #f5f5f5;
 }
 
-.form-group input[type="checkbox"] {
-    margin-right: 5px;
-}
 
-button {
-    width: 100%;
-    padding: 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #45a049;
-}
-
-.forgot-password {
-    display: block;
-    text-align: center;
-    margin-top: 20px;
-    color: #000;
-    text-decoration: none;
-}
-
-.forgot-password:hover {
-    text-decoration: underline;
-}

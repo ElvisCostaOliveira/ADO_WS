@@ -7,7 +7,7 @@ document.getElementById('registro').addEventListener('submit', function (event) 
 
     axios.post('/registro', { nome, email, senha })
         .then(function (response) {
-            window.location.href = '/calculo';
+            window.location.href = '/pagar';
         })
         .catch(function (error) {
             alert('Registro falhou: ' + error.response.data);
