@@ -92,6 +92,7 @@ app.post('/add-transaction', (req, res) => {
     let data = JSON.parse(fs.readFileSync(TRANSACTION_DATA_FILE, 'utf8'));
     const { descricao, tipo, categoria, valor, vencimento } = req.body;
 
+   
     const newId = data.transacoes.reduce((maxId, transaction) => Math.max(maxId, transaction.id), 0) + 1;
 
     const transacao = {
@@ -126,6 +127,23 @@ app.post('/delete-transaction', (req, res) => {
         res.status(404).send('Transação não encontrada.');
     }
 });
+
+app.post('/mark-as-paid', (req, res) => {
+    if (!req.session.user) {
+        return res.status(401).send('Não autorizado.');
+    }
+    const { id } = req.body;
+    let data = JSON.parse(fs.readFileSync(TRANSACTION_DATA_FILE, 'utf8'));
+    const transaction = data.transacoes.find(t => t.id === id && t.usuarioId === req.session.user.id);
+    if (transaction) {
+        transaction.status = 'Pago';
+        fs.writeFileSync(TRANSACTION_DATA_FILE, JSON.stringify(data), 'utf8');
+        res.send('Transação marcada como paga com sucesso!');
+    } else {
+        res.status(404).send('Transação não encontrada.');
+    }
+});
+
 
 
 
