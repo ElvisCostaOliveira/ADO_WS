@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     axios.get('/get-transactions').then(response => {
         const transactions = response.data;
         let totalDentroDoPrazo = 0, totalVencido = 0;
@@ -12,15 +12,13 @@ document.addEventListener('DOMContentLoaded', function() {
             row.insertCell(2).textContent = `R$ ${valor.toFixed(2)}`;
             row.insertCell(3).textContent = new Date(t.vencimento).toLocaleDateString();
 
-            // Adicionando o botão de excluir
             const deleteCell = row.insertCell(4);
             const deleteButton = document.createElement('button');
             deleteButton.textContent = 'Excluir';
             deleteButton.className = 'btn btn-danger btn-sm';
-            deleteButton.onclick = function() { deleteTransaction(row, t); };
+            deleteButton.onclick = function () { deleteTransaction(row, t); };
             deleteCell.appendChild(deleteButton);
 
-            // Calcula os totais baseados no status
             if (status === 'Dentro do prazo') {
                 totalDentroDoPrazo += valor;
             } else {
@@ -30,7 +28,6 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('totalDentroDoPrazo').innerHTML = `<strong>Total Dentro do Prazo:</strong> R$ ${totalDentroDoPrazo.toFixed(2)}`;
         document.getElementById('totalVencido').innerHTML = `<strong>Total Vencido:</strong> R$ ${totalVencido.toFixed(2)}`;
 
-        // Inicializa o DataTable aqui
         $('.table').DataTable({
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.12.1/i18n/pt-BR.json'
@@ -46,13 +43,12 @@ function deleteTransaction(row, transaction) {
     axios.post('/delete-transaction', { id: transaction.id })
         .then(response => {
             alert('Transação excluída com sucesso!');
-            row.remove(); // Remove a linha da tabela
+            row.remove(); 
         })
         .catch(error => {
             alert('Erro ao excluir transação: ' + (error.response ? error.response.data.message : 'Erro desconhecido'));
         });
 }
-
 
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -70,7 +66,7 @@ function addToTable(descricao, valor, vencimento, tipo) {
     const row = table.insertRow();
     const isOverdue = new Date(vencimento) < new Date();
     const status = isOverdue ? 'Vencido' : 'Dentro do prazo';
-    
+
     row.insertCell(0).textContent = descricao;
     const statusCell = row.insertCell(1);
     statusCell.innerHTML = `<span class="status-circle" style="background-color: ${statusColor};"></span> ${status}`;
@@ -81,14 +77,9 @@ function addToTable(descricao, valor, vencimento, tipo) {
     const deleteButton = document.createElement('button');
     deleteButton.textContent = 'Excluir';
     deleteButton.className = 'btn btn-danger btn-sm';
-    deleteButton.onclick = function() { deleteTransaction(row); };
+    deleteButton.onclick = function () { deleteTransaction(row); };
     deleteCell.appendChild(deleteButton);
 }
-
-
-
-
-
 
 function updateTotals() {
     const rows = document.querySelectorAll('#transactionsList tr');
@@ -109,28 +100,25 @@ function updateTotals() {
 }
 
 
-document.getElementById('formDespesa').addEventListener('submit', function(event) {
+document.getElementById('formDespesa').addEventListener('submit', function (event) {
     event.preventDefault();
     const descricao = document.getElementById('descricaoDespesa').value;
     let vencimento = document.getElementById('vencimentoDespesa').value;
     const valor = parseFloat(document.getElementById('valorDespesa').value);
 
-    // Ajuste para garantir que a data está no fuso horário local
-    let dataObj = new Date(vencimento + 'T00:00:00'); // Adiciona tempo para clareza, considera local
-    dataObj.setMinutes(dataObj.getMinutes() - dataObj.getTimezoneOffset()); // Ajusta para UTC
-    vencimento = dataObj.toISOString().split('T')[0]; // Re-formata para formato de data
-
+    let dataObj = new Date(vencimento + 'T00:00:00'); 
+    dataObj.setMinutes(dataObj.getMinutes() - dataObj.getTimezoneOffset()); 
+    vencimento = dataObj.toISOString().split('T')[0]; 
     axios.post('/add-transaction', {
         descricao: descricao,
         valor: valor,
         vencimento: vencimento,
         tipo: 'Despesa'
-    }).then(function(response) {
+    }).then(function (response) {
         alert('Despesa adicionada com sucesso!');
         $('#modalDespesa').modal('hide');
-        // Recarrega a página para atualizar todos os dados incluindo totais
         location.reload();
-    }).catch(function(error) {
+    }).catch(function (error) {
         alert('Erro ao adicionar despesa: ' + (error.response ? error.response.data.message : 'Erro desconhecido'));
     });
 });

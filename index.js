@@ -92,7 +92,6 @@ app.post('/add-transaction', (req, res) => {
     let data = JSON.parse(fs.readFileSync(TRANSACTION_DATA_FILE, 'utf8'));
     const { descricao, tipo, categoria, valor, vencimento } = req.body;
 
-    // Encontrar o maior ID existente e incrementar
     const newId = data.transacoes.reduce((maxId, transaction) => Math.max(maxId, transaction.id), 0) + 1;
 
     const transacao = {
