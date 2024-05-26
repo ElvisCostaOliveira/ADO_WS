@@ -14,6 +14,6 @@
     "express": "^4.19.2",
     "express-session": "^1.18.0"
   },
-  "description": "Contas a Pagar\r Descrição\r Projeto de Contas a Pagar.",
+  "description": "ADO WS\r Descrição\r Projeto de ADO WS.",
   "devDependencies": {}
 }
