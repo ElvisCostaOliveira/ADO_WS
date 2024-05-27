@@ -8,10 +8,12 @@
     <title>ADO WS</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="css/styles.css">
     <script src="https://cdn.jsdelivr.net/npm/axios@0.22.0/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="css/styles.css">
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
 </head>
 
 <body>
@@ -42,24 +44,20 @@
         </div>
     </nav>
 
-    <div class="container p-5">
-        <h1 class="mb-4 text-center">Dashboard</h1>
-        <div class="row">
-            <!-- Contas a Pagar -->
-            <div class="col-md-6">
-                <h3 class="text-center">Contas a Pagar</h3>
-                <canvas id="contasPagarChart" class="chart"></canvas>
-            </div>
-            <!-- Contas a Receber -->
-            <div class="col-md-6">
-                <h3 class="text-center">Contas a Receber</h3>
-                <canvas id="contasReceberChart" class="chart"></canvas>
-            </div>
+    <h1 class="text-center">Dashboard - Home</h1>
+
+    <div class="row">
+        <div class="col-md-6">
+            <h3 class="text-center">Contas a Pagar</h3>
+            <canvas id="chartPagar" class="chart"></canvas>
+        </div>
+        <div class="col-md-6">
+            <h3 class="text-center">Contas a Receber</h3>
+            <canvas id="chartReceber" class="chart"></canvas>
         </div>
     </div>
     
-
-
+    
 
     <footer class="footer mt-auto py-3 bg-light">
         <div class="container text-center">

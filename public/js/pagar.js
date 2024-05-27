@@ -35,6 +35,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 totalPagos += valor;
             }
         });
+        localStorage.setItem('totalDentroDoPrazo', totalDentroDoPrazo);
+        localStorage.setItem('totalVencido', totalVencido);
+        localStorage.setItem('totalPagos', totalPagos);
         document.getElementById('totalDentroDoPrazo').innerHTML = `<strong>Total em Dia:</strong> R$ ${totalDentroDoPrazo.toFixed(2)}`;
         document.getElementById('totalVencido').innerHTML = `<strong>Total Vencido:</strong> R$ ${totalVencido.toFixed(2)}`;
         document.getElementById('totalPagos').innerHTML = `<strong>Total Pago:</strong> R$ ${totalPagos.toFixed(2)}`;
@@ -64,9 +67,6 @@ function markAsPaid(row, transaction) {
         
 }
 
-
-
-
 function deleteTransaction(row, transaction) {
     axios.post('/delete-transaction', { id: transaction.id })
         .then(response => {
@@ -77,8 +77,6 @@ function deleteTransaction(row, transaction) {
             alert('Erro ao excluir transação: ' + (error.response ? error.response.data.message : 'Erro desconhecido'));
         });
 }
-
-
 
 document.addEventListener('DOMContentLoaded', function () {
     const cookieValue = document.cookie.split('; ').find(row => row.startsWith('username='));
@@ -111,11 +109,6 @@ function addToTable(descricao, valor, vencimento, tipo) {
     deleteCell.appendChild(deleteButton);
 }
 
-
-
-
-
-
 function updateTotals() {
     const rows = document.querySelectorAll('#transactionsList tr');
     let totalReceitas = 0;
@@ -133,7 +126,6 @@ function updateTotals() {
     document.getElementById('totalDespesas').textContent = `R$ ${totalDespesas.toFixed(2)}`;
     document.getElementById('saldoFinal').textContent = `R$ ${(totalReceitas - totalDespesas).toFixed(2)}`;
 }
-
 
 document.getElementById('formDespesa').addEventListener('submit', function(event) {
     event.preventDefault();

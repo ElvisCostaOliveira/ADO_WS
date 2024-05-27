@@ -16,8 +16,9 @@ body {
 }
 
 .chart {
-    width: 60% !important; /* Ajusta o tamanho dos gráficos para 75% da sua largura original */
-    height: auto !important; /* Mantém a altura automática para manter a proporção */
-    margin: 0 auto; /* Centraliza o gráfico no bloco */
+    width: 50% !important; /* Adjust the width to a smaller percentage */
+    height: auto !important; /* Maintains the height automatically to keep the aspect ratio */
+    margin: 0 auto; /* Centers the chart in the block */
 }
+
 

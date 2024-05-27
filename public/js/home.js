@@ -1,61 +1,50 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const getUsernameFromCookies = () => {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; username=`);
-        if (parts.length === 2) return parts.pop().split(';').shift();
-    };
+    const cookieValue = document.cookie.split('; ').find(row => row.startsWith('username='));
+    if (cookieValue) {
+        const username = decodeURIComponent(cookieValue.split('=')[1]);
+        document.getElementById('username').textContent = username;
+    } else {
+        document.getElementById('username').textContent = 'Usuário não identificado';
+    }
 
-    const usernameSpan = document.getElementById('username');
-    usernameSpan.textContent = getUsernameFromCookies() || 'Usuário';
-    
-    fetch('/get-transactions-summary')
-        .then(response => response.json())
-        .then(data => createChart(data, 'contasPagarChart', 'Contas a Pagar'));
+    const totalDentroDoPrazo = parseFloat(localStorage.getItem('totalDentroDoPrazo')) || 0;
+    const totalVencido = parseFloat(localStorage.getItem('totalVencido')) || 0;
+    const totalPagos = parseFloat(localStorage.getItem('totalPagos')) || 0;
 
-    fetch('/get-receivables-summary')
-        .then(response => response.json())
-        .then(data => createChart(data, 'contasReceberChart', 'Contas a Receber'));
-});
+    axios.get('/get-transactions')
+        .then(response => {
+            const data = response.data;
+            console.log(data); // Verificar dados
 
-function createChart(data, canvasId, label) {
-    const ctx = document.getElementById(canvasId).getContext('2d');
-    const totalValues = data.map(item => item.valor);
-    const labels = data.map(item => item.descricao);
-
-    new Chart(ctx, {
-        type: 'pie',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: label,
-                data: totalValues,
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'top',
+            // Gráfico de Contas a Pagar
+            const ctxPagar = document.getElementById('chartPagar').getContext('2d');
+            const chartPagar = new Chart(ctxPagar, {
+                type: 'pie',
+                data: {
+                    labels: ['Total em Dia', 'Total Vencido', 'Total Pago'],
+                    datasets: [{
+                        label: 'Total a Pagar',
+                        data: [totalDentroDoPrazo, totalVencido, totalPagos], // Use dados estáticos para teste
+                        backgroundColor: ['green', 'red', 'blue']
+                    }]
                 }
-            }
-        }
-    });
-}
+            });
 
+            // Gráfico de Contas a Receber
+            const ctxReceber = document.getElementById('chartReceber').getContext('2d');
+            const chartReceber = new Chart(ctxReceber, {
+                type: 'pie',
+                data: {
+                    labels: ['Total em Receber', 'Total Vencido', 'Total Recebido'],
+                    datasets: [{
+                        label: 'Total a Receber',
+                        data: [15, 25, 35], // Use dados estáticos para teste
+                        backgroundColor: ['yellow', 'purple', 'orange']
+                    }]
+                }
+            });
+        })
+        .catch(error => {
+            console.error('Erro ao carregar transações:', error);
+        });
+});

@@ -68,7 +68,7 @@ app.get('/pagar', (req, res) => {
         return res.redirect('/login');
     }
     res.cookie('username', req.session.user.nome, { httpOnly: false });
-    res.sendFile(path.join(__dirname, 'public', 'pagar.html'));
+    res.sendFile(path.join(__dirname, 'public', 'home.html'));
 });
 
 app.get('/logout', (req, res) => {
@@ -206,22 +206,6 @@ app.post('/delete-receivable', (req, res) => {
         res.status(404).send('Recebimento não encontrado.');
     }
 });
-
-app.get('/get-transactions-summary', (req, res) => {
-    // A lógica para agregar os dados de 'Contas a Pagar'
-});
-
-app.get('/get-receivables-summary', (req, res) => {
-    // A lógica para agregar os dados de 'Contas a Receber'
-});
-app.get('/home', (req, res) => {
-    if (!req.session.user) {
-        return res.redirect('/login');
-    }
-    res.sendFile(path.join(__dirname, 'public', 'home.html'));
-});
-
-
 
 
 // Retorno Geral
