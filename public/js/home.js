@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const cookieValue = document.cookie.split('; ').find(row => row.startsWith('username='));
     if (cookieValue) {
         const username = decodeURIComponent(cookieValue.split('=')[1]);
@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
     axios.get('/get-transactions')
         .then(response => {
             const data = response.data;
-            console.log(data); // Verificar dados
+            console.log(data);
 
             // Gráfico de Contas a Pagar
             const ctxPagar = document.getElementById('chartPagar').getContext('2d');
@@ -23,8 +23,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 data: {
                     labels: ['Total em Dia', 'Total Vencido', 'Total Pago'],
                     datasets: [{
-                        label: 'Total a Pagar',
-                        data: [totalDentroDoPrazo, totalVencido, totalPagos], // Use dados estáticos para teste
+                        label: 'Total a Pagar R$',
+                        data: [totalDentroDoPrazo, totalVencido, totalPagos],
                         backgroundColor: ['green', 'red', 'blue']
                     }]
                 }
@@ -37,8 +37,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 data: {
                     labels: ['Total em Receber', 'Total Vencido', 'Total Recebido'],
                     datasets: [{
-                        label: 'Total a Receber',
-                        data: [15, 25, 35], // Use dados estáticos para teste
+                        label: 'Total a Receber R$',
+                        data: [15, 25, 35],
                         backgroundColor: ['yellow', 'purple', 'orange']
                     }]
                 }
