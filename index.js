@@ -8,11 +8,13 @@ const bcrypt = require('bcrypt');
 const app = express();
 const PORT = 3001;
 const TRANSACTION_DATA_FILE = path.join(__dirname, 'transactions.json');
+const RECEIVABLES_DATA_FILE = path.join(__dirname, 'receivables.json');
 const USER_DATA_FILE = path.join(__dirname, 'users.json');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
+
 
 app.use(session({
     secret: 'segredo muito secreto',
@@ -21,7 +23,6 @@ app.use(session({
     cookie: { secure: false }
 }));
 
-// Inicializa os arquivos de dados se não existirem
 function initDataFile(filePath, defaultData) {
     if (!fs.existsSync(filePath)) {
         fs.writeFileSync(filePath, JSON.stringify(defaultData), 'utf8');
@@ -30,6 +31,7 @@ function initDataFile(filePath, defaultData) {
 }
 
 const transactionsData = initDataFile(TRANSACTION_DATA_FILE, { transacoes: [] });
+const receivablesData = initDataFile(RECEIVABLES_DATA_FILE, { transacoes: [] });
 let usersData = initDataFile(USER_DATA_FILE, { usuarios: [] });
 
 app.get('/register', (req, res) => res.sendFile(path.join(__dirname, 'public', 'register.html')));
@@ -53,11 +55,13 @@ app.post('/login', async (req, res) => {
     const usuario = usersData.usuarios.find(u => u.email === email);
     if (usuario && await bcrypt.compare(senha, usuario.senha)) {
         req.session.user = usuario;
+        res.cookie('username', usuario.nome, { httpOnly: false }); // Armazenar o nome no cookie
         res.redirect('/pagar');
     } else {
         res.status(401).send('Credenciais inválidas ou usuário não registrado.');
     }
 });
+
 
 app.get('/pagar', (req, res) => {
     if (!req.session.user) {
@@ -144,10 +148,83 @@ app.post('/mark-as-paid', (req, res) => {
     }
 });
 
+// Contas a Receber
+
+// Contas a Receber Routes
+app.get('/receber', (req, res) => {
+    if (!req.session.user) {
+        return res.redirect('/login');
+    }
+    res.sendFile(path.join(__dirname, 'public', 'receber.html'));
+});
+
+app.get('/get-receivables', (req, res) => {
+    if (!req.session.user) {
+        return res.status(401).send('Não autorizado.');
+    }
+    const data = JSON.parse(fs.readFileSync(RECEIVABLES_DATA_FILE, 'utf8'));
+    const recebiveisUsuario = data.transacoes.filter(t => t.usuarioId === req.session.user.id);
+    res.json(recebiveisUsuario);
+});
+
+app.post('/add-receivable', (req, res) => {
+    if (!req.session.user) {
+        return res.status(401).send('Não autorizado.');
+    }
+    let data = JSON.parse(fs.readFileSync(RECEIVABLES_DATA_FILE, 'utf8'));
+    const { descricao, valor, vencimento } = req.body;
+
+    const newReceivable = {
+        id: data.transacoes.reduce((maxId, item) => item.id > maxId ? item.id : maxId, 0) + 1,
+        descricao,
+        valor,
+        vencimento,
+        status: 'À Receber',  // Definindo o status aqui, remova do front-end se estiver duplicado
+        usuarioId: req.session.user.id
+    };
+
+    data.transacoes.push(newReceivable);
+    fs.writeFileSync(RECEIVABLES_DATA_FILE, JSON.stringify(data), 'utf8');
+    res.send('Recebimento adicionado com sucesso!');
+});
 
 
 
 
+app.post('/delete-receivable', (req, res) => {
+    if (!req.session.user) {
+        return res.status(401).send('Não autorizado.');
+    }
+    const { id } = req.body;
+    let data = JSON.parse(fs.readFileSync(RECEIVABLES_DATA_FILE, 'utf8'));
+    const index = data.transacoes.findIndex(t => t.id === id && t.usuarioId === req.session.user.id);
+    if (index > -1) {
+        data.transacoes.splice(index, 1);
+        fs.writeFileSync(RECEIVABLES_DATA_FILE, JSON.stringify(data), 'utf8');
+        res.send('Recebimento excluído com sucesso!');
+    } else {
+        res.status(404).send('Recebimento não encontrado.');
+    }
+});
+
+app.get('/get-transactions-summary', (req, res) => {
+    // A lógica para agregar os dados de 'Contas a Pagar'
+});
+
+app.get('/get-receivables-summary', (req, res) => {
+    // A lógica para agregar os dados de 'Contas a Receber'
+});
+app.get('/home', (req, res) => {
+    if (!req.session.user) {
+        return res.redirect('/login');
+    }
+    res.sendFile(path.join(__dirname, 'public', 'home.html'));
+});
+
+
+
+
+// Retorno Geral
 app.listen(PORT, () => {
     console.log(`Servidor rodando em http://localhost:${PORT}/login`);
 });

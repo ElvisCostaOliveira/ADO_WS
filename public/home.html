@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ADO WS</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios@0.22.0/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">ADO WS</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="home.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="pagar.html">Contas a Pagar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="receber.html">Contas a Receber</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="d-flex align-items-center">
+                <h5 class="me-3">Bem-vindo, <span id="username">Usuário</span>!</h5>
+                <a href="/login" class="btn btn-dark mb-3">Sair</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container p-5">
+        <h1 class="mb-4 text-center">Dashboard</h1>
+        <div class="row">
+            <!-- Contas a Pagar -->
+            <div class="col-md-6">
+                <h3 class="text-center">Contas a Pagar</h3>
+                <canvas id="contasPagarChart" class="chart"></canvas>
+            </div>
+            <!-- Contas a Receber -->
+            <div class="col-md-6">
+                <h3 class="text-center">Contas a Receber</h3>
+                <canvas id="contasReceberChart" class="chart"></canvas>
+            </div>
+        </div>
+    </div>
+    
+
+
+
+    <footer class="footer mt-auto py-3 bg-light">
+        <div class="container text-center">
+            <span class="text-muted">&copy; 2024 ADO WS. Todos os direitos reservados.</span>
+        </div>
+    </footer>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/home.js"></script>
+</body>
+
+</html>

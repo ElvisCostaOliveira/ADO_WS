@@ -35,9 +35,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 totalPagos += valor;
             }
         });
-        document.getElementById('totalDentroDoPrazo').innerHTML = `<strong>Total Dentro do Prazo:</strong> R$ ${totalDentroDoPrazo.toFixed(2)}`;
+        document.getElementById('totalDentroDoPrazo').innerHTML = `<strong>Total em Dia:</strong> R$ ${totalDentroDoPrazo.toFixed(2)}`;
         document.getElementById('totalVencido').innerHTML = `<strong>Total Vencido:</strong> R$ ${totalVencido.toFixed(2)}`;
-        document.getElementById('totalPagos').innerHTML = `<strong>Total Pagos:</strong> R$ ${totalPagos.toFixed(2)}`;
+        document.getElementById('totalPagos').innerHTML = `<strong>Total Pago:</strong> R$ ${totalPagos.toFixed(2)}`;
 
         $('.table').DataTable({
             language: {

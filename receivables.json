@@ -1,0 +1,14 @@
+{
+    "transacoes": [
+        {
+            "id": 69,
+            "descricao": "teste2",
+            "tipo": "Pago",
+            "valor": 100,
+            "vencimento": "2024-05-20",
+            "usuarioId": 1,
+            "data": "2024-05-26T23:04:48.582Z",
+            "status": "Pago"
+        }
+    ]
+}

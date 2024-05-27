@@ -15,4 +15,9 @@ body {
     background-color: #f5f5f5;
 }
 
+.chart {
+    width: 60% !important; /* Ajusta o tamanho dos gráficos para 75% da sua largura original */
+    height: auto !important; /* Mantém a altura automática para manter a proporção */
+    margin: 0 auto; /* Centraliza o gráfico no bloco */
+}
 
