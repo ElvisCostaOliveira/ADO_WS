@@ -148,6 +148,20 @@ app.post('/mark-as-paid', (req, res) => {
     }
 });
 
+app.post('/mark-receivable-as-paid', (req, res) => {
+    const { id } = req.body;
+    let data = JSON.parse(fs.readFileSync(RECEIVABLES_DATA_FILE, 'utf8'));
+    const transaction = data.transacoes.find(t => t.id === id);
+    if (transaction) {
+        transaction.status = 'Pago';
+        fs.writeFileSync(RECEIVABLES_DATA_FILE, JSON.stringify(data), 'utf8');
+        res.send('Recebimento marcado como pago com sucesso!');
+    } else {
+        res.status(404).send('Recebimento não encontrado.');
+    }
+});
+
+
 // Contas a Receber
 
 // Contas a Receber Routes
@@ -167,6 +181,7 @@ app.get('/get-receivables', (req, res) => {
     res.json(recebiveisUsuario);
 });
 
+
 app.post('/add-receivable', (req, res) => {
     if (!req.session.user) {
         return res.status(401).send('Não autorizado.');
@@ -179,7 +194,7 @@ app.post('/add-receivable', (req, res) => {
         descricao,
         valor,
         vencimento,
-        status: 'À Receber',  // Definindo o status aqui, remova do front-end se estiver duplicado
+        status: 'À Receber',
         usuarioId: req.session.user.id
     };
 
@@ -206,6 +221,7 @@ app.post('/delete-receivable', (req, res) => {
         res.status(404).send('Recebimento não encontrado.');
     }
 });
+
 
 
 // Retorno Geral

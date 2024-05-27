@@ -1,14 +1,1 @@
-{
-    "transacoes": [
-        {
-            "id": 69,
-            "descricao": "teste2",
-            "tipo": "Pago",
-            "valor": 100,
-            "vencimento": "2024-05-20",
-            "usuarioId": 1,
-            "data": "2024-05-26T23:04:48.582Z",
-            "status": "Pago"
-        }
-    ]
-}
+{"transacoes":[{"id":71,"descricao":"Teste3","valor":100,"vencimento":"2024-05-29","status":"Pago","usuarioId":1},{"id":72,"descricao":"Teste4","valor":100,"vencimento":"2024-05-21","status":"Pago","usuarioId":1},{"id":73,"descricao":"Teste1","valor":150,"vencimento":"2024-05-31","status":"À Receber","usuarioId":1}]}

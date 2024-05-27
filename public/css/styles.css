@@ -2,8 +2,25 @@ body {
     margin-bottom: 80px; 
 }
 
+#actionHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%; 
+}
+
 #sumContainer {
-    flex-grow: 1;
+    text-align: center;
+}
+
+.summary p {
+    margin: 0; 
+}
+
+@media (max-width: 768px) {
+    #actionHeader {
+        flex-direction: column;
+    }
 }
 
 .footer {
@@ -16,9 +33,9 @@ body {
 }
 
 .chart {
-    width: 50% !important; /* Adjust the width to a smaller percentage */
-    height: auto !important; /* Maintains the height automatically to keep the aspect ratio */
-    margin: 0 auto; /* Centers the chart in the block */
+    width: 50% !important; 
+    height: auto !important; 
+    margin: 0 auto; 
 }
 
 
