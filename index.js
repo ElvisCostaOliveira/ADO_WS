@@ -65,29 +65,35 @@ app.post('/login', async (req, res) => {
 
 app.get('/pagar', (req, res) => {
     if (!req.session.user) {
-        return res.redirect('/login');
+        res.redirect('/login');
+    } else {
+        res.cookie('username', req.session.user.nome, { httpOnly: false });
+        res.sendFile(path.join(__dirname, 'public', 'home.html'));
     }
-    res.cookie('username', req.session.user.nome, { httpOnly: false });
-    res.sendFile(path.join(__dirname, 'public', 'home.html'));
 });
+
 
 app.get('/logout', (req, res) => {
     req.session.destroy(err => {
         if (err) {
             return res.status(500).send('Falha ao deslogar');
         }
+        res.clearCookie('connect.sid'); 
         res.redirect('/login');
     });
 });
 
+
 app.get('/get-transactions', (req, res) => {
     if (!req.session.user) {
-        return res.status(401).send('Não autorizado.');
+        res.status(401).send('Não autorizado.');
+    } else {
+        const data = JSON.parse(fs.readFileSync(TRANSACTION_DATA_FILE, 'utf8'));
+        const transacoesUsuario = data.transacoes.filter(t => t.usuarioId === req.session.user.id);
+        res.json(transacoesUsuario);
     }
-    const data = JSON.parse(fs.readFileSync(TRANSACTION_DATA_FILE, 'utf8'));
-    const transacoesUsuario = data.transacoes.filter(t => t.usuarioId === req.session.user.id);
-    res.json(transacoesUsuario);
 });
+
 
 app.post('/add-transaction', (req, res) => {
     if (!req.session.user) {
@@ -148,24 +154,42 @@ app.post('/mark-as-paid', (req, res) => {
     }
 });
 
+app.post('/mark-receivable-as-paid', (req, res) => {
+    const { id } = req.body;
+    let data = JSON.parse(fs.readFileSync(RECEIVABLES_DATA_FILE, 'utf8'));
+    const transaction = data.transacoes.find(t => t.id === id);
+    if (transaction) {
+        transaction.status = 'Pago';
+        fs.writeFileSync(RECEIVABLES_DATA_FILE, JSON.stringify(data), 'utf8');
+        res.send('Recebimento marcado como pago com sucesso!');
+    } else {
+        res.status(404).send('Recebimento não encontrado.');
+    }
+});
+
+
 // Contas a Receber
 
 // Contas a Receber Routes
 app.get('/receber', (req, res) => {
     if (!req.session.user) {
-        return res.redirect('/login');
+        res.redirect('/login');
+    } else {
+        res.sendFile(path.join(__dirname, 'public', 'receber.html'));
     }
-    res.sendFile(path.join(__dirname, 'public', 'receber.html'));
 });
+
 
 app.get('/get-receivables', (req, res) => {
     if (!req.session.user) {
-        return res.status(401).send('Não autorizado.');
+        res.status(401).send('Não autorizado.');
+    } else {
+        const data = JSON.parse(fs.readFileSync(RECEIVABLES_DATA_FILE, 'utf8'));
+        const recebiveisUsuario = data.transacoes.filter(t => t.usuarioId === req.session.user.id);
+        res.json(recebiveisUsuario);
     }
-    const data = JSON.parse(fs.readFileSync(RECEIVABLES_DATA_FILE, 'utf8'));
-    const recebiveisUsuario = data.transacoes.filter(t => t.usuarioId === req.session.user.id);
-    res.json(recebiveisUsuario);
 });
+
 
 app.post('/add-receivable', (req, res) => {
     if (!req.session.user) {
@@ -179,7 +203,7 @@ app.post('/add-receivable', (req, res) => {
         descricao,
         valor,
         vencimento,
-        status: 'À Receber',  // Definindo o status aqui, remova do front-end se estiver duplicado
+        status: 'À Receber',
         usuarioId: req.session.user.id
     };
 
@@ -206,6 +230,7 @@ app.post('/delete-receivable', (req, res) => {
         res.status(404).send('Recebimento não encontrado.');
     }
 });
+
 
 
 // Retorno Geral

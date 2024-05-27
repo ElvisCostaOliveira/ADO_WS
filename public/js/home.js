@@ -30,16 +30,23 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
 
+
+
+
+
             // Gráfico de Contas a Receber
+            const totalPago = parseFloat(localStorage.getItem('totalPago')) || 0;
+            const totalAReceber = parseFloat(localStorage.getItem('totalAReceber')) || 0;
+
             const ctxReceber = document.getElementById('chartReceber').getContext('2d');
             const chartReceber = new Chart(ctxReceber, {
                 type: 'pie',
                 data: {
-                    labels: ['Total em Receber', 'Total Vencido', 'Total Recebido'],
+                    labels: ['Total Pago', 'Total a Receber'],
                     datasets: [{
                         label: 'Total a Receber R$',
-                        data: [15, 25, 35],
-                        backgroundColor: ['yellow', 'purple', 'orange']
+                        data: [totalPago, totalAReceber],
+                        backgroundColor: ['yellow', 'purple']
                     }]
                 }
             });

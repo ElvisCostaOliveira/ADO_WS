@@ -1,86 +1,112 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const username = decodeURIComponent(document.cookie.replace(/(?:(?:^|.*;\s*)username\s*\=\s*([^;]*).*$)|^.*$/, "$1"));
-    if (username) {
+    const cookieValue = document.cookie.split('; ').find(row => row.startsWith('username='));
+    if (cookieValue) {
+        const username = decodeURIComponent(cookieValue.split('=')[1]);
         document.getElementById('username').textContent = username;
     } else {
         document.getElementById('username').textContent = 'Usuário não identificado';
     }
-});
-
-
-    // Listener para o formulário de adicionar recebimentos
-    document.getElementById('formDespesa').addEventListener('submit', function(event) {
-        event.preventDefault();  // Isso impede que o formulário seja submetido da maneira tradicional, o que recarregaria a página.
-        const descricao = document.getElementById('descricaoDespesa').value;
-        const valor = document.getElementById('valorDespesa').value;
-        const vencimento = document.getElementById('vencimentoDespesa').value;
-    
-        axios.post('/add-receivable', {
-            descricao,
-            valor,
-            vencimento
-        })
-        .then(response => {
-            alert('Recebimento adicionado com sucesso!');
-            location.reload();
-        })
-        .catch(error => {
-            console.error('Erro ao adicionar recebimento:', error);
-            alert('Erro ao adicionar recebimento: ' + (error.response ? error.response.data : 'Erro desconhecido'));
-        });
+    const tableElement = $('#tableReceivables');
+    let dataTable = tableElement.DataTable({
+        language: {
+            url: 'https://cdn.datatables.net/plug-ins/1.12.1/i18n/pt-BR.json'
+        }
     });
-    
-    
 
-    function loadReceivables() {
-        axios.get('/get-receivables')
-            .then(response => {
-                const receivables = response.data;
-                const table = document.getElementById('transactionsList');
-                table.innerHTML = '';
-                receivables.forEach(receivable => {
-                    const row = table.insertRow();
-                    row.insertCell(0).textContent = receivable.descricao;
-                    row.insertCell(1).textContent = receivable.status;
-                    row.insertCell(2).textContent = `R$ ${parseFloat(receivable.valor).toFixed(2)}`;
-                    row.insertCell(3).textContent = new Date(receivable.vencimento).toLocaleDateString();
-                    // Adicione mais células se necessário
+    const loadReceivables = () => {
+        axios.get('/get-receivables').then(response => {
+            dataTable.clear();
+            const receivables = response.data;
+            let totalPago = 0;
+            let totalAReceber = 0;
+
+            receivables.forEach(r => {
+                const rowNode = dataTable.row.add([
+                    r.descricao,
+                    r.valor.toFixed(2),
+                    new Date(r.vencimento).toLocaleDateString(),
+                    r.status,
+                    createActionButtonGroup(r)
+                ]).draw(false).node();
+
+                if (r.status === 'Pago') {
+                    totalPago += parseFloat(r.valor);
+                } else if (r.status === 'À Receber') {
+                    totalAReceber += parseFloat(r.valor);
+                }
+                $(rowNode).find('.delete-button').on('click', function () {
+                    deleteReceivable(r.id, rowNode);
                 });
+                if (r.status === 'À Receber') {
+                    $(rowNode).find('.received-button').on('click', function () {
+                        markAsReceived(r.id, rowNode);
+                    });
+                }
+            });
+
+            // Atualizar totais
+            localStorage.setItem('totalPago', totalPago);
+            localStorage.setItem('totalAReceber', totalAReceber);
+            document.getElementById('totalPago').innerHTML = `<strong>Total Pago: </strong>R$ ${totalPago.toFixed(2)}`;
+            document.getElementById('totalAReceber').innerHTML = `<strong>Total a Receber: </strong>R$ ${totalAReceber.toFixed(2)}`;
+        }).catch(error => console.error('Erro ao carregar recebíveis:', error));
+    };
+
+    loadReceivables();
+
+    document.getElementById('formRecebivel').addEventListener('submit', function (event) {
+        event.preventDefault();
+        const descricao = document.getElementById('descricaoRecebivel').value;
+        const valor = parseFloat(document.getElementById('valorRecebivel').value);
+        const vencimento = document.getElementById('vencimentoRecebivel').value;
+
+        axios.post('/add-receivable', { descricao, valor, vencimento })
+            .then(response => {
+                const newRow = dataTable.row.add([
+                    descricao,
+                    valor.toFixed(2),
+                    new Date(vencimento).toLocaleDateString(),
+                    'À Receber',
+                    createActionButtonGroup({ id: response.data.id, status: 'À Receber' })
+                ]).draw(false).node();
+
+                $(newRow).find('.delete-button').on('click', function () {
+                    deleteReceivable(response.data.id, newRow);
+                });
+                $(newRow).find('.received-button').on('click', function () {
+                    markAsReceived(response.data.id, newRow);
+                });
+
+                document.getElementById('formRecebivel').reset();
+                $('#modalRecebivel').modal('hide');
+                alert('Recebimento adicionado com sucesso!');
             })
-            .catch(error => console.error('Erro ao carregar recebíveis:', error));
+            .catch(error => alert('Erro ao adicionar recebimento: ' + (error.response ? error.response.data.message : 'Erro desconhecido')));
+    });
+
+    function createActionButtonGroup(receivable) {
+        return `
+            <button class="btn btn-danger btn-sm delete-button">Excluir</button>
+            ${receivable.status === 'À Receber' ? `<button class="btn btn-success btn-sm received-button">Recebido</button>` : ''}
+        `;
     }
-    
 
-function addReceivable() {
-    const descricao = document.getElementById('descricaoDespesa').value;
-    const valor = document.getElementById('valorDespesa').value;
-    const vencimento = document.getElementById('vencimentoDespesa').value;
+    function deleteReceivable(id, rowNode) {
+        axios.post('/delete-receivable', { id })
+            .then(response => {
+                alert('Recebimento excluído com sucesso!');
+                dataTable.row($(rowNode)).remove().draw();
+            })
+            .catch(error => alert('Erro ao excluir recebimento: ' + (error.response ? error.response.data.message : 'Erro desconhecido')));
+    }
 
-    axios.post('/add-receivable', {
-        descricao,
-        valor,
-        vencimento,
-        status: 'À Receber' // Adiciona como à receber por padrão
-    })
-        .then(response => {
-            alert('Recebimento adicionado com sucesso!');
-            $('#modalDespesa').modal('hide'); // Fecha o modal
-            loadReceivables(); // Recarrega a lista de recebíveis
-        })
-        .catch(error => {
-            console.error('Erro ao adicionar recebimento:', error);
-            alert('Erro ao adicionar recebimento: ' + error.message);
-        });
-}
-
-function deleteReceivable(id) {
-    axios.post('/delete-receivable', { id })
-        .then(response => {
-            alert('Recebimento excluído com sucesso!');
-            loadReceivables(); // Recarrega a lista de recebíveis
-        })
-        .catch(error => {
-            console.error('Erro ao excluir recebimento:', error);
-            alert('Erro ao excluir recebimento: ' + error.message);
-        });
-}
+    function markAsReceived(id, rowNode) {
+        axios.post('/mark-receivable-as-paid', { id })
+            .then(response => {
+                alert('Recebimento marcado como pago com sucesso!');
+                dataTable.cell($(rowNode).find('td').eq(3)).data('Pago').draw();
+                $(rowNode).find('.received-button').remove();
+            })
+            .catch(error => alert('Erro ao marcar como recebido: ' + (error.response ? error.response.data.message : 'Erro desconhecido')));
+    }
+});
