@@ -65,29 +65,35 @@ app.post('/login', async (req, res) => {
 
 app.get('/pagar', (req, res) => {
     if (!req.session.user) {
-        return res.redirect('/login');
+        res.redirect('/login');
+    } else {
+        res.cookie('username', req.session.user.nome, { httpOnly: false });
+        res.sendFile(path.join(__dirname, 'public', 'home.html'));
     }
-    res.cookie('username', req.session.user.nome, { httpOnly: false });
-    res.sendFile(path.join(__dirname, 'public', 'home.html'));
 });
+
 
 app.get('/logout', (req, res) => {
     req.session.destroy(err => {
         if (err) {
             return res.status(500).send('Falha ao deslogar');
         }
+        res.clearCookie('connect.sid'); 
         res.redirect('/login');
     });
 });
 
+
 app.get('/get-transactions', (req, res) => {
     if (!req.session.user) {
-        return res.status(401).send('Não autorizado.');
+        res.status(401).send('Não autorizado.');
+    } else {
+        const data = JSON.parse(fs.readFileSync(TRANSACTION_DATA_FILE, 'utf8'));
+        const transacoesUsuario = data.transacoes.filter(t => t.usuarioId === req.session.user.id);
+        res.json(transacoesUsuario);
     }
-    const data = JSON.parse(fs.readFileSync(TRANSACTION_DATA_FILE, 'utf8'));
-    const transacoesUsuario = data.transacoes.filter(t => t.usuarioId === req.session.user.id);
-    res.json(transacoesUsuario);
 });
+
 
 app.post('/add-transaction', (req, res) => {
     if (!req.session.user) {
@@ -167,18 +173,21 @@ app.post('/mark-receivable-as-paid', (req, res) => {
 // Contas a Receber Routes
 app.get('/receber', (req, res) => {
     if (!req.session.user) {
-        return res.redirect('/login');
+        res.redirect('/login');
+    } else {
+        res.sendFile(path.join(__dirname, 'public', 'receber.html'));
     }
-    res.sendFile(path.join(__dirname, 'public', 'receber.html'));
 });
+
 
 app.get('/get-receivables', (req, res) => {
     if (!req.session.user) {
-        return res.status(401).send('Não autorizado.');
+        res.status(401).send('Não autorizado.');
+    } else {
+        const data = JSON.parse(fs.readFileSync(RECEIVABLES_DATA_FILE, 'utf8'));
+        const recebiveisUsuario = data.transacoes.filter(t => t.usuarioId === req.session.user.id);
+        res.json(recebiveisUsuario);
     }
-    const data = JSON.parse(fs.readFileSync(RECEIVABLES_DATA_FILE, 'utf8'));
-    const recebiveisUsuario = data.transacoes.filter(t => t.usuarioId === req.session.user.id);
-    res.json(recebiveisUsuario);
 });
 
 

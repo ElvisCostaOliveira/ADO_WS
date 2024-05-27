@@ -1,4 +1,11 @@
 document.addEventListener('DOMContentLoaded', function () {
+    const cookieValue = document.cookie.split('; ').find(row => row.startsWith('username='));
+    if (cookieValue) {
+        const username = decodeURIComponent(cookieValue.split('=')[1]);
+        document.getElementById('username').textContent = username;
+    } else {
+        document.getElementById('username').textContent = 'Usuário não identificado';
+    }
     const tableElement = $('#tableReceivables');
     let dataTable = tableElement.DataTable({
         language: {
