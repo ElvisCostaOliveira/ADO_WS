@@ -30,14 +30,12 @@ function initDataFile(filePath, defaultData) {
     return JSON.parse(fs.readFileSync(filePath, 'utf8'));
 }
 
-const transactionsData = initDataFile(TRANSACTION_DATA_FILE, { transacoes: [] });
-const receivablesData = initDataFile(RECEIVABLES_DATA_FILE, { transacoes: [] });
 let usersData = initDataFile(USER_DATA_FILE, { usuarios: [] });
 
-app.get('/register', (req, res) => res.sendFile(path.join(__dirname, 'public', 'register.html')));
+app.get('/registro', (req, res) => res.sendFile(path.join(__dirname, 'public', 'registro.html')));
 app.get('/login', (req, res) => res.sendFile(path.join(__dirname, 'public', 'login.html')));
 
-app.post('/register', async (req, res) => {
+app.post('/registro', async (req, res) => {
     const { nome, email, senha } = req.body;
     if (usersData.usuarios.some(u => u.email === email)) {
         return res.status(400).send('Email já cadastrado.');
@@ -166,9 +164,6 @@ app.post('/mark-receivable-as-paid', (req, res) => {
         res.status(404).send('Recebimento não encontrado.');
     }
 });
-
-
-// Contas a Receber
 
 // Contas a Receber Routes
 app.get('/receber', (req, res) => {
