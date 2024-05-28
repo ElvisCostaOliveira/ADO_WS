@@ -231,7 +231,7 @@ input[type="submit"]:hover{
 
 .content{
   width: 500px;
-  margin: 50px auto 50px auto; /* Ajuste este valor para aumentar ou diminuir a margem superior e inferior */
+  margin: 15% auto 50px auto; 
   position: relative; 
 }
 
@@ -240,12 +240,12 @@ input[type="submit"]:hover{
   background: #e1eaeb;
   color: #7f7c7c;
   left: 0;
-  right: 0; /* Adicionado para garantir que a faixa se estenda até as bordas */
+  right: 0; 
   height: 20px;
-  width: 100%; /* Alterado de 440px para 100% para usar a largura total do contêiner */
+  width: 100%; 
   padding: 17px 30px 35px 30px;
   font-size: 16px;
-  text-align: center; /* Alterado de right para center */
+  text-align: center;
   border-top: 1px solid #dbe5e8;
 
   -webkit-border-radius: 0 0  5px 5px;
