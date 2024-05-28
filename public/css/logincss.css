@@ -228,3 +228,26 @@ input[type="submit"]:hover{
     transform: translateX(-20px);
   }
 }
+
+.content{
+  width: 500px;
+  margin: 50px auto 50px auto; /* Ajuste este valor para aumentar ou diminuir a margem superior e inferior */
+  position: relative; 
+}
+
+.link{
+  position: absolute;
+  background: #e1eaeb;
+  color: #7f7c7c;
+  left: 0;
+  right: 0; /* Adicionado para garantir que a faixa se estenda até as bordas */
+  height: 20px;
+  width: 100%; /* Alterado de 440px para 100% para usar a largura total do contêiner */
+  padding: 17px 30px 35px 30px;
+  font-size: 16px;
+  text-align: center; /* Alterado de right para center */
+  border-top: 1px solid #dbe5e8;
+
+  -webkit-border-radius: 0 0  5px 5px;
+  border-radius: 0 0  5px 5px;
+}
