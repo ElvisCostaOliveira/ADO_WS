@@ -30,27 +30,27 @@ function initDataFile(filePath, defaultData) {
     return JSON.parse(fs.readFileSync(filePath, 'utf8'));
 }
 
-let usersData = initDataFile(BDU, { usuarios: [] });
+let bdUsuario = initDataFile(BDU, { usuarios: [] });
 
 app.get('/registro', (req, res) => res.sendFile(path.join(__dirname, 'public', 'registro.html')));
 app.get('/login', (req, res) => res.sendFile(path.join(__dirname, 'public', 'login.html')));
 
 app.post('/registro', async (req, res) => {
     const { nome, email, senha } = req.body;
-    if (usersData.usuarios.some(u => u.email === email)) {
+    if (bdUsuario.usuarios.some(u => u.email === email)) {
         return res.status(400).send('Email já cadastrado.');
     }
     const hashedPassword = await bcrypt.hash(senha, 10);
-    const novoUsuario = { id: usersData.usuarios.length + 1, nome, email, senha: hashedPassword };
-    usersData.usuarios.push(novoUsuario);
-    fs.writeFileSync(BDU, JSON.stringify(usersData), 'utf8');
+    const novoUsuario = { id: bdUsuario.usuarios.length + 1, nome, email, senha: hashedPassword };
+    bdUsuario.usuarios.push(novoUsuario);
+    fs.writeFileSync(BDU, JSON.stringify(bdUsuario), 'utf8');
     req.session.user = novoUsuario;
     res.redirect('/pagar');
 });
 
 app.post('/login', async (req, res) => {
     const { email, senha } = req.body;
-    const usuario = usersData.usuarios.find(u => u.email === email);
+    const usuario = bdUsuario.usuarios.find(u => u.email === email);
     if (usuario && await bcrypt.compare(senha, usuario.senha)) {
         req.session.user = usuario;
         res.cookie('username', usuario.nome, { httpOnly: false });
