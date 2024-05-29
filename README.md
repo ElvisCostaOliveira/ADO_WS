@@ -152,7 +152,7 @@ app.get('/logout', (req, res) => { ... });
 - Descrição: Destrói a sessão atual do usuário e redireciona para a página de login.
 - Ações: Destruição de sessão e limpeza de cookies.
 
-### `/get-pagamentos`
+### `/adicionar-pagamentos`
 
 ```javascript
   app.get('/receber', (req, res) => { ... });
@@ -161,7 +161,7 @@ app.get('/logout', (req, res) => { ... });
 - Descrição: Retorna as transações do usuário autenticado.
 - Ações: Verificação de sessão, leitura do arquivo `pagar.json` e filtragem das transações do usuário.
 
-### `/add-transaction`
+### `/operacoes`
 
 ```javascript
   app.post('/adicionar-pagamento', (req, res) => { ... });
@@ -170,7 +170,7 @@ app.get('/logout', (req, res) => { ... });
 - Descrição: Adiciona uma nova transação para o usuário autenticado.
 - Ações: Verificação de sessão, leitura e escrita no arquivo `pagar.json`.
 
-### `/delete-transaction`
+### `/deletar-pagamento`
 
 ```javascript
  app.post('/deletar-pagamento', (req, res) => { ... });
@@ -180,7 +180,7 @@ app.get('/logout', (req, res) => { ... });
 - Descrição: Exclui uma transação específica do usuário autenticado.
 - Ações: Verificação de sessão, leitura e escrita no arquivo `pagar.json`, filtragem e remoção da transação.
 
-### `/mark-as-paid`
+### `/marca como pago`
 
   ```javascript
   app.post('/marca-pago', (req, res) => { ... });
@@ -192,7 +192,7 @@ app.get('/logout', (req, res) => { ... });
 - Ações: Verificação de sessão, leitura e escrita no arquivo `pagar.json`, atualização do status da transação.
 
 
-### `/mark-receivable-as-paid`
+### `/marca-receber-pagar`
 
 ```javascript
 app.post('/marca-receber-pagar', (req, res) => { ... });
@@ -212,7 +212,7 @@ app.post('/marca-receber-pagar', (req, res) => { ... });
 - Descrição: Serve a página de recebíveis se o usuário estiver autenticado.
 - Ações: Verificação de sessão e envio do arquivo `public/receber.html`.
 
-### `/get-receivables`
+### `/recebimento`
   
 ```javascript
   app.get('/recebimento', (req, res) => { ... });
@@ -222,7 +222,7 @@ app.post('/marca-receber-pagar', (req, res) => { ... });
 - Descrição: Retorna os recebíveis do usuário autenticado.
 - Ações: Verificação de sessão, leitura do arquivo receber.json e filtragem dos recebíveis do usuário.
 
-### `/add-receivable`
+### `/adicionar-recebimento`
 
 ```javascript
   app.post('/adicionar-recebimento', (req, res) => { ... });
@@ -232,7 +232,7 @@ app.post('/marca-receber-pagar', (req, res) => { ... });
 - Descrição: Adiciona um novo recebível para o usuário autenticado.
 - Ações: Verificação de sessão, leitura e escrita no arquivo `receber.json`.
 
-### `/delete-receivable`
+### `/deletar-recebimento`
 
 ```javascript
   app.post('/deletar-recebimento', (req, res) => { ... });

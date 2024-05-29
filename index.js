@@ -87,8 +87,8 @@ app.get('/receber', (req, res) => {
         res.status(401).send('Não autorizado');
     } else {
         const data = JSON.parse(fs.readFileSync(BD, 'utf8'));
-        const transacoesUsuario = data.transacoes.filter(t => t.usuarioId === req.session.user.id);
-        res.json(transacoesUsuario);
+        const operacoesUsuario = data.operacoes.filter(t => t.usuarioId === req.session.user.id);
+        res.json(operacoesUsuario);
     }
 });
 
@@ -101,7 +101,7 @@ app.post('/adicionar-pagamento', (req, res) => {
     const { descricao, tipo, categoria, valor, vencimento } = req.body;
 
    
-    const newId = data.transacoes.reduce((maxId, transaction) => Math.max(maxId, transaction.id), 0) + 1;
+    const newId = data.operacoes.reduce((maxId, transaction) => Math.max(maxId, transaction.id), 0) + 1;
 
     const transacao = {
         id: newId,
@@ -114,7 +114,7 @@ app.post('/adicionar-pagamento', (req, res) => {
         data: new Date().toISOString()
     };
 
-    data.transacoes.push(transacao);
+    data.operacoes.push(transacao);
     fs.writeFileSync(BD, JSON.stringify(data), 'utf8');
     res.send('Transação adicionada com sucesso!');
 });
@@ -126,9 +126,9 @@ app.post('/deletar-pagamento', (req, res) => {
     }
     const { id } = req.body;
     let data = JSON.parse(fs.readFileSync(BD, 'utf8'));
-    const index = data.transacoes.findIndex(t => t.id === id && t.usuarioId === req.session.user.id);
+    const index = data.operacoes.findIndex(t => t.id === id && t.usuarioId === req.session.user.id);
     if (index > -1) {
-        data.transacoes.splice(index, 1);
+        data.operacoes.splice(index, 1);
         fs.writeFileSync(BD, JSON.stringify(data), 'utf8');
         res.send('Pagamento excluída com sucesso!');
     } else {
@@ -142,7 +142,7 @@ app.post('/marca-pago', (req, res) => {
     }
     const { id } = req.body;
     let data = JSON.parse(fs.readFileSync(BD, 'utf8'));
-    const transaction = data.transacoes.find(t => t.id === id && t.usuarioId === req.session.user.id);
+    const transaction = data.operacoes.find(t => t.id === id && t.usuarioId === req.session.user.id);
     if (transaction) {
         transaction.status = 'Pago';
         fs.writeFileSync(BD, JSON.stringify(data), 'utf8');
@@ -155,7 +155,7 @@ app.post('/marca-pago', (req, res) => {
 app.post('/marca-receber-pagar', (req, res) => {
     const { id } = req.body;
     let data = JSON.parse(fs.readFileSync(BDR, 'utf8'));
-    const transaction = data.transacoes.find(t => t.id === id);
+    const transaction = data.operacoes.find(t => t.id === id);
     if (transaction) {
         transaction.status = 'Pago';
         fs.writeFileSync(BDR, JSON.stringify(data), 'utf8');
@@ -180,7 +180,7 @@ app.get('/recebimento', (req, res) => {
         res.status(401).send('Não autorizado.');
     } else {
         const data = JSON.parse(fs.readFileSync(BDR, 'utf8'));
-        const recebiveisUsuario = data.transacoes.filter(t => t.usuarioId === req.session.user.id);
+        const recebiveisUsuario = data.operacoes.filter(t => t.usuarioId === req.session.user.id);
         res.json(recebiveisUsuario);
     }
 });
@@ -194,7 +194,7 @@ app.post('/adicionar-recebimento', (req, res) => {
     const { descricao, valor, vencimento } = req.body;
 
     const newReceivable = {
-        id: data.transacoes.reduce((maxId, item) => item.id > maxId ? item.id : maxId, 0) + 1,
+        id: data.operacoes.reduce((maxId, item) => item.id > maxId ? item.id : maxId, 0) + 1,
         descricao,
         valor,
         vencimento,
@@ -202,7 +202,7 @@ app.post('/adicionar-recebimento', (req, res) => {
         usuarioId: req.session.user.id
     };
 
-    data.transacoes.push(newReceivable);
+    data.operacoes.push(newReceivable);
     fs.writeFileSync(BDR, JSON.stringify(data), 'utf8');
     res.send('Recebimento adicionado com sucesso!');
 });
@@ -216,9 +216,9 @@ app.post('/deletar-recebimento', (req, res) => {
     }
     const { id } = req.body;
     let data = JSON.parse(fs.readFileSync(BDR, 'utf8'));
-    const index = data.transacoes.findIndex(t => t.id === id && t.usuarioId === req.session.user.id);
+    const index = data.operacoes.findIndex(t => t.id === id && t.usuarioId === req.session.user.id);
     if (index > -1) {
-        data.transacoes.splice(index, 1);
+        data.operacoes.splice(index, 1);
         fs.writeFileSync(BDR, JSON.stringify(data), 'utf8');
         res.send('Recebimento excluído com sucesso!');
     } else {
