@@ -9,7 +9,7 @@ const app = express();
 const PORT = 3001;
 const BD = path.join(__dirname, 'pagar.json');
 const BDR = path.join(__dirname, 'receber.json');
-const USER_DATA_FILE = path.join(__dirname, 'usuario.json');
+const BDU = path.join(__dirname, 'usuario.json');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -30,7 +30,7 @@ function initDataFile(filePath, defaultData) {
     return JSON.parse(fs.readFileSync(filePath, 'utf8'));
 }
 
-let usersData = initDataFile(USER_DATA_FILE, { usuarios: [] });
+let usersData = initDataFile(BDU, { usuarios: [] });
 
 app.get('/registro', (req, res) => res.sendFile(path.join(__dirname, 'public', 'registro.html')));
 app.get('/login', (req, res) => res.sendFile(path.join(__dirname, 'public', 'login.html')));
@@ -43,7 +43,7 @@ app.post('/registro', async (req, res) => {
     const hashedPassword = await bcrypt.hash(senha, 10);
     const novoUsuario = { id: usersData.usuarios.length + 1, nome, email, senha: hashedPassword };
     usersData.usuarios.push(novoUsuario);
-    fs.writeFileSync(USER_DATA_FILE, JSON.stringify(usersData), 'utf8');
+    fs.writeFileSync(BDU, JSON.stringify(usersData), 'utf8');
     req.session.user = novoUsuario;
     res.redirect('/pagar');
 });
