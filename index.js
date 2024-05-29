@@ -226,9 +226,7 @@ app.post('/deletar-recebimento', (req, res) => {
     }
 });
 
-
-
 // Retorno Geral
 app.listen(PORT, () => {
-    console.log(`Servidor rodando em http://localhost:${PORT}/login`);
+    console.log(`http://localhost:${PORT}/login`);
 });

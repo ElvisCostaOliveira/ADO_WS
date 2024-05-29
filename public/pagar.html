@@ -49,7 +49,7 @@
                 <p id="totalVencido">Total Vencido: R$ 0,00</p>
                 <p id="totalPagos">Total Pago: R$ 0,00</p>
             </div>
-            <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modalDespesa">Adicionar Conta</button>
+            <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#pagarModal">Adicionar Conta</button>
         </div>
         <hr>
         <table class="table mt-4">
@@ -68,19 +68,18 @@
     
 
     <!-- Modal de Despesa -->
-    <!-- Modal de Despesa -->
-<div class="modal fade" id="modalDespesa" tabindex="-1" aria-labelledby="modalDespesaLabel" aria-hidden="true">
+<div class="modal fade" id="pagarModal" tabindex="-1" aria-labelledby="pagarModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title" id="modalDespesaLabel"><i class="bi bi-plus-circle-fill"></i> Adicionar Nova Conta</h5>
+                <h5 class="modal-title" id="pagarModalLabel"><i class="bi bi-plus-circle-fill"></i> Adicionar Nova Conta</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body bg-light">
                 <form id="formDespesa">
                     <div class="mb-3">
-                        <label for="descricaoDespesa" class="form-label"><i class="bi bi-card-text"></i> Descrição</label>
-                        <input type="text" class="form-control" id="descricaoDespesa" required>
+                        <label for="pagarDesc" class="form-label"><i class="bi bi-card-text"></i> Descrição</label>
+                        <input type="text" class="form-control" id="pagarDesc" required>
                     </div>
                     <div class="mb-3">
                         <label for="valorDespesa" class="form-label"><i class="bi bi-currency-dollar"></i> Valor</label>
@@ -100,7 +99,7 @@
 
     <footer class="footer mt-auto py-3 bg-light">
         <div class="container text-center">
-            <span class="text-muted">&copy; ADO WS. Todos os direitos reservados.</span>
+            <span class="text-muted">&copy; ADO WS. </span>
         </div>
     </footer>
     

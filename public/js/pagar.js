@@ -129,7 +129,7 @@ function updateTotals() {
 
 document.getElementById('formDespesa').addEventListener('submit', function(event) {
     event.preventDefault();
-    const descricao = document.getElementById('descricaoDespesa').value;
+    const descricao = document.getElementById('pagarDesc').value;
     let vencimento = document.getElementById('vencimentoDespesa').value;
     const valor = parseFloat(document.getElementById('valorDespesa').value);
 
@@ -145,7 +145,7 @@ document.getElementById('formDespesa').addEventListener('submit', function(event
         tipo: 'Despesa'
     }).then(function(response) {
         alert('Despesa adicionada com sucesso!');
-        $('#modalDespesa').modal('hide');
+        $('#pagarModal').modal('hide');
         // Recarrega a página para atualizar todos os dados incluindo totais
         location.reload();
     }).catch(function(error) {
