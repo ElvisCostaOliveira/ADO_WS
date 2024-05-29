@@ -7,8 +7,8 @@ const bcrypt = require('bcrypt');
 
 const app = express();
 const PORT = 3001;
-const TRANSACTION_DATA_FILE = path.join(__dirname, 'pagar.json');
-const RECEIVABLES_DATA_FILE = path.join(__dirname, 'receber.json');
+const BD = path.join(__dirname, 'pagar.json');
+const BDR = path.join(__dirname, 'receber.json');
 const USER_DATA_FILE = path.join(__dirname, 'usuario.json');
 
 app.use(bodyParser.json());
@@ -53,10 +53,10 @@ app.post('/login', async (req, res) => {
     const usuario = usersData.usuarios.find(u => u.email === email);
     if (usuario && await bcrypt.compare(senha, usuario.senha)) {
         req.session.user = usuario;
-        res.cookie('username', usuario.nome, { httpOnly: false }); // Armazenar o nome no cookie
+        res.cookie('username', usuario.nome, { httpOnly: false });
         res.redirect('/pagar');
     } else {
-        res.status(401).send('Credenciais inválidas ou usuário não registrado.');
+        res.status(401).send('Credenciais inválidas');
     }
 });
 
@@ -74,7 +74,7 @@ app.get('/pagar', (req, res) => {
 app.get('/logout', (req, res) => {
     req.session.destroy(err => {
         if (err) {
-            return res.status(500).send('Falha ao deslogar');
+            return res.status(500).send('Falha');
         }
         res.clearCookie('connect.sid'); 
         res.redirect('/login');
@@ -84,9 +84,9 @@ app.get('/logout', (req, res) => {
 
 app.get('/receber', (req, res) => {
     if (!req.session.user) {
-        res.status(401).send('Não autorizado.');
+        res.status(401).send('Não autorizado');
     } else {
-        const data = JSON.parse(fs.readFileSync(TRANSACTION_DATA_FILE, 'utf8'));
+        const data = JSON.parse(fs.readFileSync(BD, 'utf8'));
         const transacoesUsuario = data.transacoes.filter(t => t.usuarioId === req.session.user.id);
         res.json(transacoesUsuario);
     }
@@ -95,9 +95,9 @@ app.get('/receber', (req, res) => {
 
 app.post('/adicionar-pagamento', (req, res) => {
     if (!req.session.user) {
-        return res.status(401).send('Não autorizado.');
+        return res.status(401).send('Não autorizado');
     }
-    let data = JSON.parse(fs.readFileSync(TRANSACTION_DATA_FILE, 'utf8'));
+    let data = JSON.parse(fs.readFileSync(BD, 'utf8'));
     const { descricao, tipo, categoria, valor, vencimento } = req.body;
 
    
@@ -115,7 +115,7 @@ app.post('/adicionar-pagamento', (req, res) => {
     };
 
     data.transacoes.push(transacao);
-    fs.writeFileSync(TRANSACTION_DATA_FILE, JSON.stringify(data), 'utf8');
+    fs.writeFileSync(BD, JSON.stringify(data), 'utf8');
     res.send('Transação adicionada com sucesso!');
 });
 
@@ -125,14 +125,14 @@ app.post('/deletar-pagamento', (req, res) => {
         return res.status(401).send('Não autorizado.');
     }
     const { id } = req.body;
-    let data = JSON.parse(fs.readFileSync(TRANSACTION_DATA_FILE, 'utf8'));
+    let data = JSON.parse(fs.readFileSync(BD, 'utf8'));
     const index = data.transacoes.findIndex(t => t.id === id && t.usuarioId === req.session.user.id);
     if (index > -1) {
         data.transacoes.splice(index, 1);
-        fs.writeFileSync(TRANSACTION_DATA_FILE, JSON.stringify(data), 'utf8');
-        res.send('Transação excluída com sucesso!');
+        fs.writeFileSync(BD, JSON.stringify(data), 'utf8');
+        res.send('Pagamento excluída com sucesso!');
     } else {
-        res.status(404).send('Transação não encontrada.');
+        res.status(404).send('Pagamento não encontrada.');
     }
 });
 
@@ -141,24 +141,24 @@ app.post('/marca-pago', (req, res) => {
         return res.status(401).send('Não autorizado.');
     }
     const { id } = req.body;
-    let data = JSON.parse(fs.readFileSync(TRANSACTION_DATA_FILE, 'utf8'));
+    let data = JSON.parse(fs.readFileSync(BD, 'utf8'));
     const transaction = data.transacoes.find(t => t.id === id && t.usuarioId === req.session.user.id);
     if (transaction) {
         transaction.status = 'Pago';
-        fs.writeFileSync(TRANSACTION_DATA_FILE, JSON.stringify(data), 'utf8');
-        res.send('Transação marcada como paga com sucesso!');
+        fs.writeFileSync(BD, JSON.stringify(data), 'utf8');
+        res.send('Paga com sucesso!');
     } else {
-        res.status(404).send('Transação não encontrada.');
+        res.status(404).send('Pagamento não encontrada.');
     }
 });
 
 app.post('/marca-receber-pagar', (req, res) => {
     const { id } = req.body;
-    let data = JSON.parse(fs.readFileSync(RECEIVABLES_DATA_FILE, 'utf8'));
+    let data = JSON.parse(fs.readFileSync(BDR, 'utf8'));
     const transaction = data.transacoes.find(t => t.id === id);
     if (transaction) {
         transaction.status = 'Pago';
-        fs.writeFileSync(RECEIVABLES_DATA_FILE, JSON.stringify(data), 'utf8');
+        fs.writeFileSync(BDR, JSON.stringify(data), 'utf8');
         res.send('Recebimento marcado como pago com sucesso!');
     } else {
         res.status(404).send('Recebimento não encontrado.');
@@ -179,7 +179,7 @@ app.get('/recebimento', (req, res) => {
     if (!req.session.user) {
         res.status(401).send('Não autorizado.');
     } else {
-        const data = JSON.parse(fs.readFileSync(RECEIVABLES_DATA_FILE, 'utf8'));
+        const data = JSON.parse(fs.readFileSync(BDR, 'utf8'));
         const recebiveisUsuario = data.transacoes.filter(t => t.usuarioId === req.session.user.id);
         res.json(recebiveisUsuario);
     }
@@ -190,7 +190,7 @@ app.post('/adicionar-recebimento', (req, res) => {
     if (!req.session.user) {
         return res.status(401).send('Não autorizado.');
     }
-    let data = JSON.parse(fs.readFileSync(RECEIVABLES_DATA_FILE, 'utf8'));
+    let data = JSON.parse(fs.readFileSync(BDR, 'utf8'));
     const { descricao, valor, vencimento } = req.body;
 
     const newReceivable = {
@@ -203,7 +203,7 @@ app.post('/adicionar-recebimento', (req, res) => {
     };
 
     data.transacoes.push(newReceivable);
-    fs.writeFileSync(RECEIVABLES_DATA_FILE, JSON.stringify(data), 'utf8');
+    fs.writeFileSync(BDR, JSON.stringify(data), 'utf8');
     res.send('Recebimento adicionado com sucesso!');
 });
 
@@ -215,11 +215,11 @@ app.post('/deletar-recebimento', (req, res) => {
         return res.status(401).send('Não autorizado.');
     }
     const { id } = req.body;
-    let data = JSON.parse(fs.readFileSync(RECEIVABLES_DATA_FILE, 'utf8'));
+    let data = JSON.parse(fs.readFileSync(BDR, 'utf8'));
     const index = data.transacoes.findIndex(t => t.id === id && t.usuarioId === req.session.user.id);
     if (index > -1) {
         data.transacoes.splice(index, 1);
-        fs.writeFileSync(RECEIVABLES_DATA_FILE, JSON.stringify(data), 'utf8');
+        fs.writeFileSync(BDR, JSON.stringify(data), 'utf8');
         res.send('Recebimento excluído com sucesso!');
     } else {
         res.status(404).send('Recebimento não encontrado.');

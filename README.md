@@ -36,7 +36,7 @@ Axios é uma biblioteca de cliente HTTP baseada em Promises, que facilita fazer 
 
 
 
- Utilizando o arquivo home.js como exemplo, Na linha 14(atualmente) existe o : ```axios.get('/receber')``` Que envia uma requisição GET para o endpoint /get-transactions do servidor.
+ Utilizando o arquivo home.js como exemplo, Na linha 14(atualmente) existe o : ```axios.get('/receber')``` Que envia uma requisição GET para o endpoint /get-pagamentos do servidor.
  Dentro dessa estrutura do Axios, usamos o método ```.then``` para tratar a resposta e processar os dados retornados, e o método ```.catch``` para tratar possíveis erros na requisição.
  ## exemplo completo:
  ```javascript
@@ -152,7 +152,7 @@ app.get('/logout', (req, res) => { ... });
 - Descrição: Destrói a sessão atual do usuário e redireciona para a página de login.
 - Ações: Destruição de sessão e limpeza de cookies.
 
-### `/get-transactions`
+### `/get-pagamentos`
 
 ```javascript
   app.get('/receber', (req, res) => { ... });

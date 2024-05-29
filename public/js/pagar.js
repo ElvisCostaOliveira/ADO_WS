@@ -1,9 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
     axios.get('/receber').then(response => {
-        const transactions = response.data;
+        const pagamentos = response.data;
         let totalDentroDoPrazo = 0, totalVencido = 0, totalPagos = 0;
-        const table = document.getElementById('transactionsList');
-        transactions.forEach(t => {
+        const table = document.getElementById('listaPagamento');
+        pagamentos.forEach(t => {
             const row = table.insertRow();
             const status = new Date(t.vencimento) < new Date() ? 'Vencido' : (t.status === 'Pago' ? 'Pago' : 'Dentro do prazo');
             const valor = parseFloat(t.valor);
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const payButton = document.createElement('button');
                 payButton.textContent = 'Pago';
                 payButton.className = 'btn btn-success btn-sm';
-                payButton.onclick = function() { markAsPaid(row, t); };
+                payButton.onclick = function() { marcarPago(row, t); };
                 actionsCell.appendChild(payButton);
             }
 
@@ -52,17 +52,17 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-function markAsPaid(row, transaction) {
+function marcarPago(row, transaction) {
     axios.post('/marca-pago', { id: transaction.id })
         .then(response => {
-            alert(response.data); // Mostra a mensagem de sucesso
+            alert(response.data); 
             transaction.status = 'Pago';
-            row.cells[1].textContent = 'Pago'; // Atualiza status na tabela
-            let payButton = row.cells[4].getElementsByTagName('button')[1]; // Assume que o botão "Pago" é o segundo botão
+            row.cells[1].textContent = 'Pago';
+            let payButton = row.cells[4].getElementsByTagName('button')[1]; 
             if (payButton) {
-                payButton.remove(); // Remove o botão "Pago"
+                payButton.remove(); 
             }
-            updateTotals(); // Recalcula totais
+            atualizaTotal(); 
         })
         
 }
@@ -71,7 +71,7 @@ function deleteTransaction(row, transaction) {
     axios.post('/deletar-pagamento', { id: transaction.id })
         .then(response => {
             alert('Transação excluída com sucesso!');
-            row.remove(); // Remove a linha da tabela
+            row.remove(); 
         })
         .catch(error => {
             alert('Erro ao excluir transação: ' + (error.response ? error.response.data.message : 'Erro desconhecido'));
@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function addToTable(descricao, valor, vencimento, tipo) {
-    const table = document.getElementById('transactionsList');
+    const table = document.getElementById('listaPagamento');
     const row = table.insertRow();
     const isOverdue = new Date(vencimento) < new Date();
     const status = isOverdue ? 'Vencido' : 'Dentro do prazo';
@@ -109,8 +109,8 @@ function addToTable(descricao, valor, vencimento, tipo) {
     deleteCell.appendChild(deleteButton);
 }
 
-function updateTotals() {
-    const rows = document.querySelectorAll('#transactionsList tr');
+function atualizaTotal() {
+    const rows = document.querySelectorAll('#listaPagamento tr');
     let totalReceitas = 0;
     let totalDespesas = 0;
     rows.forEach(row => {
@@ -133,10 +133,9 @@ document.getElementById('formDespesa').addEventListener('submit', function(event
     let vencimento = document.getElementById('vencimentoDespesa').value;
     const valor = parseFloat(document.getElementById('valorDespesa').value);
 
-    // Ajuste para garantir que a data está no fuso horário local
-    let dataObj = new Date(vencimento + 'T00:00:00'); // Adiciona tempo para clareza, considera local
-    dataObj.setMinutes(dataObj.getMinutes() - dataObj.getTimezoneOffset()); // Ajusta para UTC
-    vencimento = dataObj.toISOString().split('T')[0]; // Re-formata para formato de data
+    let dataObj = new Date(vencimento + 'T00:00:00'); 
+    dataObj.setMinutes(dataObj.getMinutes() - dataObj.getTimezoneOffset()); 
+    vencimento = dataObj.toISOString().split('T')[0]; 
 
     axios.post('/adicionar-pagamento', {
         descricao: descricao,
