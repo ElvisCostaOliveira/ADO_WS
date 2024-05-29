@@ -50,7 +50,7 @@ Axios é uma biblioteca de cliente HTTP baseada em Promises, que facilita fazer 
             const chartPagar = new Chart(ctxPagar, {
                 type: 'pie',
                 data: {
-                    labels: ['Total em Dia', 'Total Vencido', 'Total Pago'],
+                    labels: ['Dentro do Prazo', 'Total Vencido', 'Total Pago'],
                     datasets: [{
                         label: 'Total a Pagar R$',
                         data: [totalDentroDoPrazo, totalVencido, totalPagos],

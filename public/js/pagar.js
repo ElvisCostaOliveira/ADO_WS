@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
         localStorage.setItem('totalDentroDoPrazo', totalDentroDoPrazo);
         localStorage.setItem('totalVencido', totalVencido);
         localStorage.setItem('totalPagos', totalPagos);
-        document.getElementById('totalDentroDoPrazo').innerHTML = `<strong>Total em Dia:</strong> R$ ${totalDentroDoPrazo.toFixed(2)}`;
+        document.getElementById('totalDentroDoPrazo').innerHTML = `<strong>Dentro do Prazo:</strong> R$ ${totalDentroDoPrazo.toFixed(2)}`;
         document.getElementById('totalVencido').innerHTML = `<strong>Total Vencido:</strong> R$ ${totalVencido.toFixed(2)}`;
         document.getElementById('totalPagos').innerHTML = `<strong>Total Pago:</strong> R$ ${totalPagos.toFixed(2)}`;
 
