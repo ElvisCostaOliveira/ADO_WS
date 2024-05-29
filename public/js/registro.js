@@ -15,13 +15,13 @@ document.getElementById('registro').addEventListener('submit', function (event) 
 
     if (!nome.trim()) {
         alert('Por favor, insira o seu nome.');
-        event.preventDefault(); // Impede o envio do formulário
+        event.preventDefault(); 
     } else if (!email) {
         alert('Por favor, insira o seu email.');
-        event.preventDefault(); // Impede o envio do formulário
+        event.preventDefault(); 
     } else if (!senha) {
         alert('Por favor, insira a sua senha.');
-        event.preventDefault(); // Impede o envio do formulário
+        event.preventDefault(); 
     }
 
 

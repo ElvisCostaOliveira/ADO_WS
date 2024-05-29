@@ -13,13 +13,13 @@ document.getElementById('login').addEventListener('submit', function(event) {
 
     if (!email) {
         alert('Por favor, insira o seu email.');
-        event.preventDefault(); // Impede o envio do formulário
+        event.preventDefault(); 
     } else if (!senha) {
         alert('Por favor, insira a sua senha.');
-        event.preventDefault(); // Impede o envio do formulário
+        event.preventDefault(); 
     } else if (!validarEmail(email)) {
         alert('Por favor, insira um endereço de email válido.');
-        event.preventDefault(); // Impede o envio do formulário
+        event.preventDefault(); 
     }
 
     function validarEmail(email) {

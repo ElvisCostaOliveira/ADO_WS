@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    axios.get('/get-transactions').then(response => {
+    axios.get('/receber').then(response => {
         const transactions = response.data;
         let totalDentroDoPrazo = 0, totalVencido = 0, totalPagos = 0;
         const table = document.getElementById('transactionsList');
@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function markAsPaid(row, transaction) {
-    axios.post('/mark-as-paid', { id: transaction.id })
+    axios.post('/marca-pago', { id: transaction.id })
         .then(response => {
             alert(response.data); // Mostra a mensagem de sucesso
             transaction.status = 'Pago';
@@ -68,7 +68,7 @@ function markAsPaid(row, transaction) {
 }
 
 function deleteTransaction(row, transaction) {
-    axios.post('/delete-transaction', { id: transaction.id })
+    axios.post('/deletar-pagamento', { id: transaction.id })
         .then(response => {
             alert('Transação excluída com sucesso!');
             row.remove(); // Remove a linha da tabela
@@ -138,7 +138,7 @@ document.getElementById('formDespesa').addEventListener('submit', function(event
     dataObj.setMinutes(dataObj.getMinutes() - dataObj.getTimezoneOffset()); // Ajusta para UTC
     vencimento = dataObj.toISOString().split('T')[0]; // Re-formata para formato de data
 
-    axios.post('/add-transaction', {
+    axios.post('/adicionar-pagamento', {
         descricao: descricao,
         valor: valor,
         vencimento: vencimento,

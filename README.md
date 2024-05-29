@@ -36,11 +36,11 @@ Axios é uma biblioteca de cliente HTTP baseada em Promises, que facilita fazer 
 
 
 
- Utilizando o arquivo home.js como exemplo, Na linha 14(atualmente) existe o : ```axios.get('/get-transactions')``` Que envia uma requisição GET para o endpoint /get-transactions do servidor.
+ Utilizando o arquivo home.js como exemplo, Na linha 14(atualmente) existe o : ```axios.get('/receber')``` Que envia uma requisição GET para o endpoint /get-transactions do servidor.
  Dentro dessa estrutura do Axios, usamos o método ```.then``` para tratar a resposta e processar os dados retornados, e o método ```.catch``` para tratar possíveis erros na requisição.
  ## exemplo completo:
  ```javascript
-    axios.get('/get-transactions')
+    axios.get('/receber')
         .then(response => {
             const data = response.data;
             console.log(data);
@@ -118,7 +118,7 @@ app.post('/registro', async (req, res) => { ... });
 ```
 
 - Método: POST
-- Descrição: Registra um novo usuário, verificando se o email já está cadastrado. Se não estiver, cria um novo usuário com a senha criptografada e armazena no arquivo `users.json`.
+- Descrição: Registra um novo usuário, verificando se o email já está cadastrado. Se não estiver, cria um novo usuário com a senha criptografada e armazena no arquivo `usuario.json`.
 - Ações: Criação de novo usuário, hash da senha, atualização de sessão e redirecionamento para `/pagar`.
 
 
@@ -155,52 +155,52 @@ app.get('/logout', (req, res) => { ... });
 ### `/get-transactions`
 
 ```javascript
-  app.get('/get-transactions', (req, res) => { ... });
+  app.get('/receber', (req, res) => { ... });
 ```
 - Método: GET
 - Descrição: Retorna as transações do usuário autenticado.
-- Ações: Verificação de sessão, leitura do arquivo `transactions.json` e filtragem das transações do usuário.
+- Ações: Verificação de sessão, leitura do arquivo `pagar.json` e filtragem das transações do usuário.
 
 ### `/add-transaction`
 
 ```javascript
-  app.post('/add-transaction', (req, res) => { ... });
+  app.post('/adicionar-pagamento', (req, res) => { ... });
 ```
 - Método: POST
 - Descrição: Adiciona uma nova transação para o usuário autenticado.
-- Ações: Verificação de sessão, leitura e escrita no arquivo `transactions.json`.
+- Ações: Verificação de sessão, leitura e escrita no arquivo `pagar.json`.
 
 ### `/delete-transaction`
 
 ```javascript
- app.post('/delete-transaction', (req, res) => { ... });
+ app.post('/deletar-pagamento', (req, res) => { ... });
 ```
 
 - Método: POST
 - Descrição: Exclui uma transação específica do usuário autenticado.
-- Ações: Verificação de sessão, leitura e escrita no arquivo `transactions.json`, filtragem e remoção da transação.
+- Ações: Verificação de sessão, leitura e escrita no arquivo `pagar.json`, filtragem e remoção da transação.
 
 ### `/mark-as-paid`
 
   ```javascript
-  app.post('/mark-as-paid', (req, res) => { ... });
+  app.post('/marca-pago', (req, res) => { ... });
   ```
 
 
 - Método: POST
 - Descrição: Marca uma transação específica como paga para o usuário autenticado.
-- Ações: Verificação de sessão, leitura e escrita no arquivo `transactions.json`, atualização do status da transação.
+- Ações: Verificação de sessão, leitura e escrita no arquivo `pagar.json`, atualização do status da transação.
 
 
 ### `/mark-receivable-as-paid`
 
 ```javascript
-app.post('/mark-receivable-as-paid', (req, res) => { ... });
+app.post('/marca-receber-pagar', (req, res) => { ... });
  ```
 
 - Método: POST
 - Descrição: Marca um recebível específico como pago.
-- Ações: Leitura e escrita no arquivo `receivables.json`, atualização do status do recebível.
+- Ações: Leitura e escrita no arquivo `receber.json`, atualização do status do recebível.
 
 ### `/receber`
  
@@ -215,32 +215,32 @@ app.post('/mark-receivable-as-paid', (req, res) => { ... });
 ### `/get-receivables`
   
 ```javascript
-  app.get('/get-receivables', (req, res) => { ... });
+  app.get('/recebimento', (req, res) => { ... });
 ```
 
 - Método: GET
 - Descrição: Retorna os recebíveis do usuário autenticado.
-- Ações: Verificação de sessão, leitura do arquivo receivables.json e filtragem dos recebíveis do usuário.
+- Ações: Verificação de sessão, leitura do arquivo receber.json e filtragem dos recebíveis do usuário.
 
 ### `/add-receivable`
 
 ```javascript
-  app.post('/add-receivable', (req, res) => { ... });
+  app.post('/adicionar-recebimento', (req, res) => { ... });
 ```
 
 - Método: POST
 - Descrição: Adiciona um novo recebível para o usuário autenticado.
-- Ações: Verificação de sessão, leitura e escrita no arquivo `receivables.json`.
+- Ações: Verificação de sessão, leitura e escrita no arquivo `receber.json`.
 
 ### `/delete-receivable`
 
 ```javascript
-  app.post('/delete-receivable', (req, res) => { ... });
+  app.post('/deletar-recebimento', (req, res) => { ... });
 ```
 
 - Método: POST
 - Descrição: Exclui um recebível específico do usuário autenticado.
-- Ações: Verificação de sessão, leitura e escrita no arquivo `receivables.json`, filtragem e remoção do recebível.
+- Ações: Verificação de sessão, leitura e escrita no arquivo `receber.json`, filtragem e remoção do recebível.
 
 ### Servidor
 ```javascript
@@ -283,9 +283,9 @@ ADO_WS
 ├── package-lock.json
 ├── package.json
 ├── README.md
-├── receivables.json
-├── transactions.json
-└── users.json
+├── receber.json
+├── pagar.json
+└── usuario.json
 ```
 
 <div align="center">

@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const totalVencido = parseFloat(localStorage.getItem('totalVencido')) || 0;
     const totalPagos = parseFloat(localStorage.getItem('totalPagos')) || 0;
 
-    axios.get('/get-transactions')
+    axios.get('/receber')
         .then(response => {
             const data = response.data;
             console.log(data);

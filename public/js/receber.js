@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     const loadReceivables = () => {
-        axios.get('/get-receivables').then(response => {
+        axios.get('/recebimento').then(response => {
             dataTable.clear();
             const receivables = response.data;
             let totalPago = 0;
@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const valor = parseFloat(document.getElementById('valorRecebivel').value);
         const vencimento = document.getElementById('vencimentoRecebivel').value;
 
-        axios.post('/add-receivable', { descricao, valor, vencimento })
+        axios.post('/adicionar-recebimento', { descricao, valor, vencimento })
             .then(response => {
                 const newRow = dataTable.row.add([
                     descricao,
@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function deleteReceivable(id, rowNode) {
-        axios.post('/delete-receivable', { id })
+        axios.post('/deletar-recebimento', { id })
             .then(response => {
                 alert('Recebimento excluído com sucesso!');
                 dataTable.row($(rowNode)).remove().draw();
@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function markAsReceived(id, rowNode) {
-        axios.post('/mark-receivable-as-paid', { id })
+        axios.post('/marca-receber-pagar', { id })
             .then(response => {
                 alert('Recebimento marcado como pago com sucesso!');
                 dataTable.cell($(rowNode).find('td').eq(3)).data('Pago').draw();
