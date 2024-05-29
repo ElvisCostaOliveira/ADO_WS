@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const table = document.getElementById('listaPagamento');
         pagamentos.forEach(t => {
             const row = table.insertRow();
-            const status = new Date(t.vencimento) < new Date() ? 'Vencido' : (t.status === 'Pago' ? 'Pago' : 'Dentro do prazo');
+            const status = new Date(t.vencimento) < new Date() ? 'Vencido' : (t.status === 'Pago' ? 'Pago' : 'Dentro do Prazo');
             const valor = parseFloat(t.valor);
             row.insertCell(0).textContent = t.descricao;
             row.insertCell(1).textContent = status;
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
             deleteButton.onclick = function() { deleteTransaction(row, t); };
             actionsCell.appendChild(deleteButton);
 
-            if (status === 'Dentro do prazo' || status === 'Vencido') {
+            if (status === 'Dentro do Prazo' || status === 'Vencido') {
                 const payButton = document.createElement('button');
                 payButton.textContent = 'Pago';
                 payButton.className = 'btn btn-success btn-sm';
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 actionsCell.appendChild(payButton);
             }
 
-            if (status === 'Dentro do prazo') {
+            if (status === 'Dentro do Prazo') {
                 totalDentroDoPrazo += valor;
             } else if (status === 'Vencido') {
                 totalVencido += valor;
@@ -92,7 +92,7 @@ function addToTable(descricao, valor, vencimento, tipo) {
     const table = document.getElementById('listaPagamento');
     const row = table.insertRow();
     const isOverdue = new Date(vencimento) < new Date();
-    const status = isOverdue ? 'Vencido' : 'Dentro do prazo';
+    const status = isOverdue ? 'Vencido' : 'Dentro do Prazo';
     
 
     row.insertCell(0).textContent = descricao;
@@ -115,7 +115,7 @@ function atualizaTotal() {
     let totalDespesas = 0;
     rows.forEach(row => {
         const valor = parseFloat(row.cells[2].textContent.replace('R$ ', ''));
-        const tipo = row.cells[1].textContent.includes('Dentro do prazo') || row.cells[1].textContent.includes('Vencido') ? 'Despesa' : 'Receita';
+        const tipo = row.cells[1].textContent.includes('Dentro do Prazo') || row.cells[1].textContent.includes('Vencido') ? 'Despesa' : 'Receita';
         if (tipo === 'Receita') {
             totalReceitas += valor;
         } else {
