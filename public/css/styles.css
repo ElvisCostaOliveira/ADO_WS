@@ -39,3 +39,42 @@ body {
 }
 
 
+.modal-header {
+    background: #70777e;
+    color: white;
+}
+
+.modal-body {
+    background-color: #f8f9fa;
+    border-top: 5px solid #70777e; 
+}
+
+.btn-close {
+    filter: invert(1); 
+}
+
+.modal-header.bg-success {
+    background-color: #28a745;
+}
+
+.btn-close-white {
+    filter: invert(1); 
+}
+
+.modal-body {
+    padding: 20px;
+    background-color: #fff; 
+}
+
+.modal-content {
+    border: 1px solid #28a745; 
+}
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.bi {
+    margin-right: 5px; 
+}

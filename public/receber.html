@@ -66,33 +66,34 @@
     </div>
 
     <!-- Modal para Adicionar Recebível -->
-    <div class="modal fade" id="modalRecebivel" tabindex="-1" aria-labelledby="modalRecebivelLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalRecebivelLabel">Novo Recebível</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="formRecebivel">
-                        <div class="mb-3">
-                            <label for="descricaoRecebivel" class="form-label">Descrição</label>
-                            <input type="text" class="form-control" id="descricaoRecebivel" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="valorRecebivel" class="form-label">Valor</label>
-                            <input type="number" class="form-control" id="valorRecebivel" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="vencimentoRecebivel" class="form-label">Vencimento</label>
-                            <input type="date" class="form-control" id="vencimentoRecebivel" required>
-                        </div>
-                        <button type="submit" class="btn btn-secondary">Salvar</button>
-                    </form>
-                </div>
+<div class="modal fade" id="modalRecebivel" tabindex="-1" aria-labelledby="modalRecebivelLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="modalRecebivelLabel"><i class="bi bi-plus-lg"></i> Adicionar Novo Recebível</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body bg-light">
+                <form id="formRecebivel">
+                    <div class="mb-3">
+                        <label for="descricaoRecebivel" class="form-label"><i class="bi bi-card-text"></i> Descrição</label>
+                        <input type="text" class="form-control" id="descricaoRecebivel" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="valorRecebivel" class="form-label"><i class="bi bi-cash"></i> Valor</label>
+                        <input type="number" class="form-control" id="valorRecebivel" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="vencimentoRecebivel" class="form-label"><i class="bi bi-calendar2-date"></i> Vencimento</label>
+                        <input type="date" class="form-control" id="vencimentoRecebivel" required>
+                    </div>
+                    <button type="submit" class="btn btn-success">Salvar</button>
+                </form>
             </div>
         </div>
     </div>
+</div>
+
 
     <footer class="footer mt-auto py-3 bg-light">
         <div class="container text-center">

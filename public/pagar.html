@@ -68,34 +68,36 @@
     
 
     <!-- Modal de Despesa -->
-    <div class="modal fade" id="modalDespesa" tabindex="-1" aria-labelledby="modalDespesaLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalDespesaLabel">Nova Conta</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="formDespesa">
-                        <div class="mb-3">
-                            <label for="descricaoDespesa" class="form-label">Descrição</label>
-                            <input type="text" class="form-control" id="descricaoDespesa" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="valorDespesa" class="form-label">Valor</label>
-                            <input type="number" class="form-control" id="valorDespesa" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="vencimentoDespesa" class="form-label">Vencimento</label>
-                            <input type="date" class="form-control" id="vencimentoDespesa" required>
-                        </div>
-                        <hr>
-                        <button type="submit" class="btn btn-secondary">Salvar</button>
-                    </form>
-                </div>
+    <!-- Modal de Despesa -->
+<div class="modal fade" id="modalDespesa" tabindex="-1" aria-labelledby="modalDespesaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="modalDespesaLabel"><i class="bi bi-plus-circle-fill"></i> Adicionar Nova Conta</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body bg-light">
+                <form id="formDespesa">
+                    <div class="mb-3">
+                        <label for="descricaoDespesa" class="form-label"><i class="bi bi-card-text"></i> Descrição</label>
+                        <input type="text" class="form-control" id="descricaoDespesa" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="valorDespesa" class="form-label"><i class="bi bi-currency-dollar"></i> Valor</label>
+                        <input type="number" class="form-control" id="valorDespesa" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="vencimentoDespesa" class="form-label"><i class="bi bi-calendar-event"></i> Vencimento</label>
+                        <input type="date" class="form-control" id="vencimentoDespesa" required>
+                    </div>
+                    <hr>
+                    <button type="submit" class="btn btn-secondary">Salvar</button>
+                </form>
             </div>
         </div>
     </div>
+</div>
+
     <footer class="footer mt-auto py-3 bg-light">
         <div class="container text-center">
             <span class="text-muted">&copy; ADO WS. Todos os direitos reservados.</span>
